@@ -1,6 +1,6 @@
 {
-  "name": "react-native-agora",
-  "version": "2.9.1-alpha.3",
+  "name": "react-native-agoraStarfish",
+  "version": "1.0",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/syanbo/react-native-agora.git"
+    "url": "https://github.com/puhahalx/react-native-agora.git"
   },
   "keywords": [
     "agora",
@@ -26,15 +26,12 @@
     "video",
     "react-native-video"
   ],
-  "author": "syanbo",
-  "authors": [
-    "https://github.com/syanbo/react-native-agora/graphs/contributors"
-  ],
+  "author": "chujiu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/syanbo/react-native-agora/issues"
+    "url": "https://github.com/puhahalx/react-native-agora/issues"
   },
-  "homepage": "https://github.com/syanbo/react-native-agora#readme",
+  "homepage": "https://github.com/puhahalx/react-native-agora#readme",
   "peerDependencies": {
     "react": "16.3.1",
     "react-native": ">=0.55.0"
