@@ -1,6 +1,6 @@
 {
   "name": "react-native-agorastarfish",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Native around the Agora RTC SDKs for Android and iOS agora",
   "summary": "agora native sdk for react-native",
   "main": "lib/index.js",
@@ -27,6 +27,9 @@
     "react-native-video"
   ],
   "author": "chujiu",
+  "authors": [
+    "https://github.com/puhahalx/react-native-agora/graphs/contributors"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/puhahalx/react-native-agora/issues"
