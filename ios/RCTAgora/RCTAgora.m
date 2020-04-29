@@ -11,7 +11,6 @@
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
 #import <React/RCTView.h>
-#import <AgoraRtcEngineKit/AgoraRtcEngineKit.h>
 #import "AgoraConst.h"
 
 #define MAX_DATA_LENGTH 1024
@@ -68,7 +67,7 @@ RCT_EXPORT_MODULE();
 - (AgoraImage *) makeAgoraImage:(NSDictionary *)options {
   AgoraImage *img = [AgoraImage new];
   img.url = [NSURL URLWithString:options[@"url"]];
-  
+
   img.rect = CGRectMake((CGFloat)[options[@"x"] floatValue],
                         (CGFloat)[options[@"y"] floatValue],
                         (CGFloat)[options[@"width"] floatValue],
@@ -176,12 +175,12 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
   [self startObserving];
   [AgoraConst share].appid = options[@"appid"];
-  
+
   self.rtcEngine = [AgoraRtcEngineKit sharedEngineWithAppId:options[@"appid"] delegate:self];
   self.appId = options[@"appid"];
-  
+
   [AgoraConst share].rtcEngine = self.rtcEngine;
-  
+
   [self.rtcEngine setAppType:AgoraRtc_APP_TYPE_REACTNATIVE];
   //channel mode
   [self.rtcEngine setChannelProfile:[options[@"channelProfile"] integerValue]];
@@ -210,7 +209,7 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
     [self.rtcEngine enableLocalVideo:true];
     [self.rtcEngine enableLocalAudio:true];
   }
-  
+
   if ([options objectForKey:@"beauty"]) {
     AgoraBeautyOptions *beautyOption = [[AgoraBeautyOptions alloc] init];
     beautyOption.lighteningContrastLevel = [options[@"beauty"][@"lighteningContrastLevel"] integerValue];
@@ -235,13 +234,13 @@ RCT_EXPORT_METHOD(init:(NSDictionary *)options) {
       [self.rtcEngine setEncryptionMode:options[@"secretMode"]];
     }
   }
-  
+
   AgoraVideoEncoderConfiguration *video_encoder_config = [[AgoraVideoEncoderConfiguration new] initWithWidth:[options[@"videoEncoderConfig"][@"width"] integerValue] height:[options[@"videoEncoderConfig"][@"height"] integerValue] frameRate:[options[@"videoEncoderConfig"][@"frameRate"] integerValue] bitrate:[options[@"videoEncoderConfig"][@"bitrate"] integerValue] orientationMode: (AgoraVideoOutputOrientationMode)[options[@"videoEncoderConfig"][@"orientationMode"] integerValue]];
   [self.rtcEngine setVideoEncoderConfiguration:video_encoder_config];
   [self.rtcEngine setClientRole:(AgoraClientRole)[options[@"clientRole"] integerValue]];
   [self.rtcEngine setAudioProfile:(AgoraAudioProfile)[options[@"audioProfile"] integerValue]
                          scenario:(AgoraAudioScenario)[options[@"audioScenario"] integerValue]];
-  
+
   //Enable Agora Native SDK be Interoperable with Agora Web SDK
   [self.rtcEngine enableWebSdkInteroperability:YES];
 }
@@ -772,7 +771,7 @@ RCT_EXPORT_METHOD(adjustPlaybackSignalVolume: (NSInteger) volume
 }
 
 // enable audio volume indication
-RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSInteger)smooth 
+RCT_EXPORT_METHOD(enableAudioVolumeIndication: (NSInteger) interval smooth:(NSInteger)smooth
                   report_vad:(BOOL)report_vad
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
@@ -1385,7 +1384,7 @@ RCT_EXPORT_METHOD(addInjectStreamUrl
   config.audioSampleRate = (AgoraAudioSampleRateType)[options[@"config"][@"audioSampleRate"] integerValue];
   config.audioBitrate = [options[@"config"][@"audioBitrate"] integerValue];
   config.audioChannels = [options[@"config"][@"audioChannels"] integerValue];
-  
+
   NSInteger res = [self.rtcEngine addInjectStreamUrl:options[@"url"]
                                               config:config];
   if (res == 0) {
@@ -1400,7 +1399,7 @@ RCT_EXPORT_METHOD(removeInjectStreamUrl
                   :(NSString *)url
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  
+
   NSInteger res = [self.rtcEngine removeInjectStreamUrl:url];
   if (res == 0) {
     resolve(nil);
@@ -1410,11 +1409,12 @@ RCT_EXPORT_METHOD(removeInjectStreamUrl
 }
 
 // set local video mirror mode
-RCT_EXPORT_METHOD(setLocalVideoMirrorMode
-                  :(NSInteger) mode
+RCT_EXPORT_METHOD(setLocalVideoRenderMode
+                  :(NSInteger) renderMode
+                  mirrorMode:(NSInteger) mirrorMode
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
-  NSInteger res = [self.rtcEngine setLocalVideoMirrorMode:(AgoraVideoMirrorMode) mode];
+  NSInteger res = [self.rtcEngine setLocalRenderMode:(AgoraVideoRenderMode)renderMode mirrorMode:(AgoraVideoMirrorMode) mirrorMode];
   if (res == 0) {
     resolve(nil);
   } else {
