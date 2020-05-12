@@ -2,9 +2,13 @@ package com.syan.agora;
 
 import android.view.SurfaceView;
 
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
+import io.agora.rtc.RtcEngine;
+import io.agora.rtc.video.VideoCanvas;
 
 /**
  * Created by DB on 2017/6/23.
@@ -14,13 +18,16 @@ public class AgoraViewManager extends SimpleViewManager<AgoraVideoView> {
 
     public static final String REACT_CLASS = "RCTAgoraVideoView";
 
-    public SurfaceView surfaceView;
+    ReactApplicationContext mCallerContext;
 
     @Override
     public String getName() {
         return REACT_CLASS;
     }
 
+    public AgoraViewManager(ReactApplicationContext reactContext) {
+        mCallerContext = reactContext;
+    }
     @Override
     protected AgoraVideoView createViewInstance(ThemedReactContext reactContext) {
         return new AgoraVideoView(reactContext);
@@ -35,26 +42,35 @@ public class AgoraViewManager extends SimpleViewManager<AgoraVideoView> {
     public void setShowLocalVideo(final AgoraVideoView agoraVideoView, boolean showLocalVideo) {
         agoraVideoView.setShowLocalVideo(showLocalVideo);
         if (showLocalVideo) {
-            AgoraManager.getInstance().setupLocalVideo(agoraVideoView.getRenderMode());
-            surfaceView = AgoraManager.getInstance().getLocalSurfaceView();
-            surfaceView.setZOrderMediaOverlay(agoraVideoView.getZOrderMediaOverlay());
+            SurfaceView surfaceView=RtcEngine.CreateRendererView(mCallerContext);
+            VideoCanvas canvas=new VideoCanvas(surfaceView, agoraVideoView.getRenderMode(), AgoraManager.getInstance().mLocalUid);
+            agoraVideoView.canvas=canvas;
             agoraVideoView.addView(surfaceView);
+            AgoraManager.getInstance().setupLocalVideo(canvas);
+            canvas.view.setZOrderMediaOverlay(agoraVideoView.getZOrderMediaOverlay());
         }
     }
 
     @ReactProp(name = "zOrderMediaOverlay")
     public void setZOrderMediaOverlay(final AgoraVideoView agoraVideoView, boolean zOrderMediaOverlay) {
-        surfaceView.setZOrderMediaOverlay(zOrderMediaOverlay);
+        agoraVideoView.setZOrderMediaOverlay(zOrderMediaOverlay);
+        VideoCanvas canvas=agoraVideoView.canvas;
+        if(canvas!=null)
+        {
+            canvas.view.setZOrderMediaOverlay(zOrderMediaOverlay);
+        }
     }
 
     @ReactProp(name = "remoteUid")
     public void setRemoteUid(final AgoraVideoView agoraVideoView, final int remoteUid) {
         agoraVideoView.setRemoteUid(remoteUid);
         if (remoteUid != 0) {
-            AgoraManager.getInstance().setupRemoteVideo(remoteUid, agoraVideoView.getRenderMode());
-            surfaceView = AgoraManager.getInstance().getSurfaceView(remoteUid);
-            surfaceView.setZOrderMediaOverlay(agoraVideoView.getZOrderMediaOverlay());
+            SurfaceView surfaceView=RtcEngine.CreateRendererView(mCallerContext);
+            VideoCanvas canvas=new VideoCanvas(surfaceView, agoraVideoView.getRenderMode(), remoteUid);
+            agoraVideoView.canvas=canvas;
             agoraVideoView.addView(surfaceView);
+            AgoraManager.getInstance().setupRemoteVideo(canvas);
+            canvas.view.setZOrderMediaOverlay(agoraVideoView.getZOrderMediaOverlay());
         }
     }
 

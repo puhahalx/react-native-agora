@@ -1,7 +1,6 @@
 package com.syan.agora;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceView;
@@ -36,13 +35,12 @@ public class AgoraManager {
 
     private Context context;
 
-    private int mLocalUid = 0;
+    public int mLocalUid = 0;
 
     private AgoraManager() {
-        mSurfaceViews = new SparseArray<SurfaceView>();
+
     }
 
-    private SparseArray<SurfaceView> mSurfaceViews;
 
     public static AgoraManager getInstance() {
         if (sAgoraManager == null) {
@@ -187,19 +185,15 @@ public class AgoraManager {
     /**
      * setupLocalVideo will render video from local side capture into ui layout
      */
-    public int setupLocalVideo(Integer mode) {
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        mSurfaceViews.put(mLocalUid, surfaceView);
-        return mRtcEngine.setupLocalVideo(new VideoCanvas(surfaceView, mode, mLocalUid));
+    public void setupLocalVideo(VideoCanvas canvas) {
+        mRtcEngine.setupLocalVideo(canvas);
     }
 
     /**
      * setupRemoteVideo will render video from remote side capture into ui layout
      */
-    public int setupRemoteVideo(final int uid, final Integer mode) {
-        SurfaceView surfaceView = RtcEngine.CreateRendererView(context);
-        mSurfaceViews.put(uid, surfaceView);
-        return mRtcEngine.setupRemoteVideo(new VideoCanvas(surfaceView, mode, uid));
+    public void setupRemoteVideo(VideoCanvas canvas) {
+         mRtcEngine.setupRemoteVideo(canvas);
     }
 
     /**
@@ -273,26 +267,6 @@ public class AgoraManager {
         return mRtcEngine.leaveChannel();
     }
 
-    public void removeSurfaceView(int uid) {
-        mSurfaceViews.remove(uid);
-    }
-
-    public List<SurfaceView> getSurfaceViews() {
-        List<SurfaceView> list = new ArrayList<SurfaceView>();
-        for (int i = 0; i < mSurfaceViews.size(); i++) {
-            SurfaceView surfaceView = mSurfaceViews.valueAt(i);
-            list.add(surfaceView);
-        }
-        return list;
-    }
-
-    public SurfaceView getLocalSurfaceView() {
-        return mSurfaceViews.get(mLocalUid);
-    }
-
-    public SurfaceView getSurfaceView(int uid) {
-        return mSurfaceViews.get(uid);
-    }
 
 
 }

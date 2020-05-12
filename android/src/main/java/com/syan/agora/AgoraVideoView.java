@@ -7,9 +7,9 @@ import android.media.MediaCodecList;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import io.agora.rtc.video.VideoCanvas;
 
 import static android.media.MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar;
 import static android.media.MediaFormat.KEY_BIT_RATE;
@@ -69,7 +71,14 @@ public class AgoraVideoView extends LinearLayout implements MediaDataAudioObserv
     private Integer renderMode = 1;
     private Integer remoteUid;
     private boolean zOrderMediaOverlay;
-
+    private SurfaceView surfaceView;
+    public VideoCanvas canvas;
+    public SurfaceView getSurfaceView(){
+        return this.surfaceView;
+    }
+    public void setSurfaceView(SurfaceView surfaceView){
+         this.surfaceView=surfaceView;
+    }
     public AgoraVideoView(Context context) {
         super(context);
     }

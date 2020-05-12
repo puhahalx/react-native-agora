@@ -1,7 +1,6 @@
 package com.syan.agora;
 
 import android.graphics.Rect;
-import android.support.annotation.Nullable;
 import android.view.SurfaceView;
 
 import com.facebook.react.bridge.Arguments;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IAudioEffectManager;
 import io.agora.rtc.IMetadataObserver;
@@ -2129,32 +2129,6 @@ public class AgoraModule extends ReactContextBaseJavaModule {
         }
     }
 
-    private static boolean recording = false;
-
-    // TODO: need implementation
-    @ReactMethod
-    public void startAVRecording(final ReadableMap option, final Promise promise) {
-        String path = option.getString("path");
-        Integer uid = option.getInt("uid");
-        String format = option.getString("format");
-        if (true == recording) {
-            promise.reject("-1", "recording already started");
-        }
-        SurfaceView view = AgoraManager.getInstance().getSurfaceView(uid);
-        if (null == view) {
-            promise.reject("-1", "recording already started");
-        }
-    }
-
-    // TODO: need implementation
-    @ReactMethod
-    public void stopAVRecording(final Promise promise) {
-        if (false == recording) {
-            promise.reject("-1", "recording didn't start");
-        } else {
-            promise.resolve(null);
-        }
-    }
 
     public LiveInjectStreamConfig.AudioSampleRateType getAudioSampleRateEnum (int val) {
         LiveInjectStreamConfig.AudioSampleRateType type = LiveInjectStreamConfig.AudioSampleRateType.TYPE_32000;
